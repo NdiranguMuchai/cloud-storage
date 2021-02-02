@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.config;
 
-import com.udacity.jwdnd.course1.cloudstorage.services.AuthenticationService;
+import com.udacity.jwdnd.course1.cloudstorage.services.security.AuthenticationService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,6 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll();
 
-        http.formLogin().defaultSuccessUrl("/result", true);
+        http.formLogin().defaultSuccessUrl("/home", true);
     }
 }
