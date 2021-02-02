@@ -24,7 +24,9 @@ public class EncryptionService {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
             encryptedValue = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
+
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
                 | IllegalBlockSizeException | BadPaddingException e) {
             logger.error(e.getMessage());
@@ -40,7 +42,9 @@ public class EncryptionService {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
             decryptedValue = cipher.doFinal(Base64.getDecoder().decode(data));
+
         } catch (NoSuchAlgorithmException | NoSuchPaddingException
                 | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             logger.error(e.getMessage());
