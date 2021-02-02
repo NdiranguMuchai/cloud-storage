@@ -8,9 +8,9 @@ public class File {
     private String contentType;
     private String fileSize;
     private Integer userId;
-    private String fileData;
+    private Blob fileData;
 
-    public File(Integer fileId, String fileName, String contentType, String fileSize, Integer userId, String fileData) {
+    public File(Integer fileId, String fileName, String contentType, String fileSize, Integer userId, Blob fileData) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.contentType = contentType;
@@ -59,11 +59,11 @@ public class File {
         this.userId = userId;
     }
 
-    public String getFileData() {
+    public Blob getFileData() {
         return fileData;
     }
 
-    public void setFileData(String fileData) {
+    public void setFileData(Blob fileData) {
         this.fileData = fileData;
     }
 }
