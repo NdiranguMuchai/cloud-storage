@@ -6,6 +6,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.security.EncryptionServic
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,23 +29,8 @@ public class FileService {
         return fileMapper.findById(id);
     }
 
-    public File upload(File file, MultipartFile multipartFile){
-        saveFileData(file, multipartFile);
-        return fileMapper.upload(file);
-    }
-
-    public File update(File file, MultipartFile multipartFile) throws Exception{
-        if (file.getFileId() == null){
-            throw  new Exception("Id does not exist");
-        }else {
-            saveFileData(file, multipartFile);
-        }
-        file.setFileId(file.getFileId());
-        file.setUserId(file.getUserId());
-        return fileMapper.update(file);
-    }
-
-    private void saveFileData(File file, MultipartFile multipartFile) {
+    @Transactional
+    public void upload(File file, MultipartFile multipartFile){
         try {
             Byte [] byteObjects = new Byte[multipartFile.getBytes().length];
 
@@ -52,14 +38,43 @@ public class FileService {
             for (byte byt : multipartFile.getBytes()){
                 byteObjects[value++] = byt;
             }
+
             file.setFileData(byteObjects);
+            fileMapper.upload(file);
 
         }catch (IOException e){
             logger.error(e.getMessage());
         }
     }
 
+//
+//    public File update(File file, MultipartFile multipartFile) throws Exception{
+//        if (file.getFileId() == null){
+//            throw  new Exception("Id does not exist");
+//        }else {
+//            saveFileData(file, multipartFile);
+//        }
+//        file.setFileId(file.getFileId());
+//        file.setUserId(file.getUserId());
+//        return fileMapper.update(file);
+//    }
+//@Transactional
+//    public void saveFileData(File file, MultipartFile multipartFile) {
+//        try {
+//            Byte [] byteObjects = new Byte[multipartFile.getBytes().length];
+//
+//            int value = 0;
+//            for (byte byt : multipartFile.getBytes()){
+//                byteObjects[value++] = byt;
+//            }
+//            file.setFileData(byteObjects);
+//
+//        }catch (IOException e){
+//            logger.error(e.getMessage());
+//        }
+//    }
+
     public void delete(Integer id){
-         fileMapper.delete(id);
+        fileMapper.delete(id);
     }
 }
