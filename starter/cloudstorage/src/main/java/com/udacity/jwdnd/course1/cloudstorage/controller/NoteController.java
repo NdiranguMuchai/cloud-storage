@@ -27,7 +27,7 @@ public class NoteController {
     public String findById(@PathVariable Integer id, Model model)throws Exception{
         noteService.findById(id).orElseThrow(()-> new Exception("Note with id "+id+ " not found"));
 
-        model.addAttribute("note", noteService.findById(id));
+        model.addAttribute("noteElement", noteService.findById(id));
         return "home";
     }
 
