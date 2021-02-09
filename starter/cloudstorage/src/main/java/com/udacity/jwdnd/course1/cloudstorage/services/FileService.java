@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -22,7 +23,10 @@ public class FileService {
     }
 
     public List<File> listAll(){
-        return fileMapper.list();
+        List<File> fileList = new LinkedList<>();
+
+         fileMapper.list().iterator().forEachRemaining(fileList::add);
+         return fileList;
     }
 
     public File findById(Integer id){
