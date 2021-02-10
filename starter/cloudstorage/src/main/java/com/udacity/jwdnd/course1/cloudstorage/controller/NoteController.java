@@ -1,7 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/home/note")
 public class NoteController {
     private final NoteService noteService;
+    private final UserService userService;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
+        this.userService = userService;
     }
 
 
@@ -38,7 +43,9 @@ public class NoteController {
   }
 
     @PostMapping
-    public String save(@ModelAttribute Note note){
+    public String save(@ModelAttribute Note note, Authentication authentication){
+        User user = userService.getUser(authentication.getName());
+        note.setUserid(user.getUserId());
        noteService.save(note);
        return "result";
     }
