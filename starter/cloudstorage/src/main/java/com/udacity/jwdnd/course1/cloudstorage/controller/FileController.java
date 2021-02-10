@@ -23,7 +23,7 @@ public class FileController {
     public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, File file, Model model){
 
         fileService.upload(file, multipartFile);
-        if (file.getFileData()!= null){
+        if (file.getFiledata()!= null){
             model.addAttribute("successMessage", true);
         }else
             model.addAttribute("errorMessage");

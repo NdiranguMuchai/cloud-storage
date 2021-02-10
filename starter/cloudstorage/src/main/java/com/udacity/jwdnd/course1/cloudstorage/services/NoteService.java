@@ -34,9 +34,9 @@ public class NoteService {
     }
 
     public Integer update(Note note) throws Exception{
-        noteMapper.findById(note.getNoteId()).orElseThrow(()-> new Exception("Note with id "+note.getNoteId()+" not found"));
-        note.setNoteId(note.getNoteId());
-        note.setUserId(note.getUserId());
+        noteMapper.findById(note.getNoteid()).orElseThrow(()-> new Exception("Note with id "+note.getNoteid()+" not found"));
+        note.setNoteid(note.getNoteid());
+        note.setUserid(note.getUserid());
 
         return noteMapper.update(note);
     }

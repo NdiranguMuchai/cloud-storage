@@ -54,7 +54,7 @@
                                         <a target="_blank" class="btn btn-success">View</a>
                                         <a  class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row" th:text="${fileItem.fileName}">ExampleFile.txt</th>
+                                    <th scope="row" th:text="${fileItem.filename}">ExampleFile.txt</th>
                                 </tr>
                                 </tbody>
                             </table>
@@ -80,8 +80,8 @@
                                             <button type="button" class="btn btn-success">Edit</button>
                                             <a class="btn btn-danger">Delete</a>
                                         </td>
-                                        <th scope="row" th:text="${noteItem.noteTitle}">Example Note Title</th>
-                                        <td th:text="${noteItem.noteDescription}">Example Note Description </td>
+                                        <th scope="row" th:text="${noteItem.notetitle}">Example Note Title</th>
+                                        <td th:text="${noteItem.notedescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -97,15 +97,15 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" th:object="${note}" th:action="@{/home/note}" method="POST">
-                                            <input type="hidden" name="noteId" id="note-id" th:field="*{noteId}" />
+                                        <form action="#" th:object="${note}" th:action="@{/home/note/}" method="POST">
+                                            <input type="hidden" name="noteid" id="noteid" th:field="*{noteid}" />
                                             <div class="form-group">
-                                                <label for="note-title" class="col-form-label">Title</label>
-                                                <input type="text" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required th:field="*{noteTitle}" />
+                                                <label for="notetitle" class="col-form-label">Title</label>
+                                                <input type="text" name= "notetitle" class="form-control" id="notetitle" maxlength="20" required th:field="*{notetitle}" />
                                             </div>
                                             <div class="form-group">
-                                                <label for="note-description" class="col-form-label">Description</label>
-                                                <textarea class="form-control" name="noteDescription" id="note-description" rows="5" maxlength="1000" required th:field="*{noteDescription}"></textarea>
+                                                <label for="notedescription" class="col-form-label">Description</label>
+                                                <textarea class="form-control" name="notedescription" id="notedescription" rows="5" maxlength="1000" required th:field="*{notedescription}"></textarea>
                                             </div>
                                             <button id="noteSubmit" type="submit" class="d-none"></button>
                                         </form>

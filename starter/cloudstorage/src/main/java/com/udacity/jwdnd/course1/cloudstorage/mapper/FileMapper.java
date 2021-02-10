@@ -14,12 +14,12 @@ public interface FileMapper {
     File findById(Integer id);
 
     @Insert("INSERT INTO FILES(filename, contenttype, filesize, userid, filedata) " +
-            "VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
+            "VALUES(#{filename}, #{contenttype}, #{filesize}, #{userid}, #{filedata})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
     void upload(File file);
 
-    @Update("UPDATE FILES SET filename = #{fileName}, contenttype = #{contentType}," +
-            " filesize = #{fileSize}, userid = #{userId}, filedata = #{fileData} WHERE fileId = #{fileId}")
+    @Update("UPDATE FILES SET filename = #{filename}, contenttype = #{contenttype}," +
+            " filesize = #{filesize}, userid = #{userid}, filedata = #{filedata} WHERE fileId = #{fileId}")
     File update(File file);
 
     @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")

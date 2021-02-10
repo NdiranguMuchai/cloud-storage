@@ -2,7 +2,6 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
-import com.udacity.jwdnd.course1.cloudstorage.services.security.EncryptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class FileService {
                 byteObjects[value++] = byt;
             }
 
-            file.setFileData(byteObjects);
+            file.setFiledata(byteObjects);
             fileMapper.upload(file);
 
         }catch (IOException e){
