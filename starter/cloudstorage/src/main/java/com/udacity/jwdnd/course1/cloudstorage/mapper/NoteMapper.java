@@ -3,24 +3,20 @@ package com.udacity.jwdnd.course1.cloudstorage.mapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.apache.ibatis.annotations.*;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 
 @Mapper
 public interface NoteMapper {
-    @Select("SELECT * FROM NOTES")
-    Set<Note> list();
+    @Select("SELECT * FROM NOTES WHERE userid = #{userId}")
+    List<Note> getNotes(Integer userId);
 
-    @Select("SELECT * FROM NOTES WHERE noteid = #{noteid}")
-    Optional<Note> findById(Integer id);
+    @Insert("INSERT INTO NOTES (noteTitle, noteDescription, userId) VALUES(#{title},#{description},#{userId})")
+    @Options(useGeneratedKeys = true, keyProperty = "noteId")
+    int insert(Note note);
 
-    @Insert("INSERT INTO NOTES(notetitle, notedescription, userid) VALUES(#{notetitle}, #{notedescription}), #{userid}")
-    @Options(useGeneratedKeys = true, keyProperty = "noteid")
-    Integer save(Note note);
+    @Update("UPDATE NOTES SET title=#{noteTitle}, noteDescription =#{description} WHERE noteId =#{noteId}")
+    void updateNote(Note note);
 
-    @Update("UPDATE NOTES SET notetitle = #{notetitle}, notedescription = #{notedescription}, userid = #{userid} WHERE noteid = #{noteid}")
-    Integer update(Note note);
-
-    @Delete("DELETE FROM NOTES WHERE noteid = #{noteid}")
-    void delete(Integer id);
+    @Delete("DELETE FROM NOTES WHERE noteId =#{noteId}")
+    void deleteNote(int noteId);
 }

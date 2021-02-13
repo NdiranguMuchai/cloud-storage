@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping("/home/note")
+@RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
     private final UserService userService;
@@ -21,32 +21,26 @@ public class NoteController {
         this.userService = userService;
     }
 
-
-    @GetMapping
-    public String listAll(Model model){
-        model.addAttribute("noteList", noteService.findAll());
-        return "home";
-    }
-
-    @GetMapping("/{id}")
-    public String findById(@PathVariable Integer id, Model model)throws Exception{
-        noteService.findById(id).orElseThrow(()-> new Exception("Note with id "+id+ " not found"));
-
-        model.addAttribute("noteElement", noteService.findById(id));
-        return "home";
-    }
-
-  @RequestMapping("/new")
-  public String newFile(Model model){
-        model.addAttribute("note", new Note());
-        return  "home";
-  }
-
     @PostMapping
-    public String save(@ModelAttribute Note note, Authentication authentication){
+    public String createNote(@ModelAttribute Note note, Authentication authentication, Model model){
+        String noteAddError = null;
+
         User user = userService.getUser(authentication.getName());
-        note.setUserid(user.getUserId());
-       noteService.save(note);
-       return "result";
+
+        Integer userId = user.getUserId();
+        note.setUserId(userId);
+
+        int rowsAdded = noteService.createNote(note);
+        if (rowsAdded < 0){
+            noteAddError = "There was an error for adding a note. Please try again";
+        }
+        if (noteAddError == null) {
+            model.addAttribute("noteAddSuccess", true);
+        } else {
+            model.addAttribute("noteAddError", noteAddError);
+        }
+
+
+        return "redirect:/home";
     }
 }

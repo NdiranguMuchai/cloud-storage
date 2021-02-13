@@ -18,21 +18,23 @@ public class SignUpController {
         this.userService = userService;
     }
 
+
     @GetMapping()
-    public String getPage(){
+    public String signupView() {
         return "signup";
     }
 
     @PostMapping()
     public String signupUser(@ModelAttribute User user, Model model) {
         String signupError = null;
+        String signupSuccess = null;
 
         if (!userService.isUsernameAvailable(user.getUsername())) {
             signupError = "The username already exists.";
         }
 
         if (signupError == null) {
-            Integer rowsAdded = userService.create(user);
+            int rowsAdded = userService.createUser(user);
             if (rowsAdded < 0) {
                 signupError = "There was an error signing you up. Please try again.";
             }
