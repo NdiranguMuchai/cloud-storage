@@ -32,7 +32,7 @@ public class NoteController {
 
         int rowsAdded = noteService.createNote(note);
         if (rowsAdded < 0){
-            noteAddError = "There was an error for adding a note. Please try again";
+            noteAddError = "Error while creating note. Please try again";
         }
         if (noteAddError == null) {
             model.addAttribute("noteAddSuccess", true);

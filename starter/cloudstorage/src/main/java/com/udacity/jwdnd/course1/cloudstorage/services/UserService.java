@@ -24,6 +24,7 @@ public class UserService {
         random.nextBytes(salt);
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
+
         user.setSalt(encodedSalt);
         user.setPassword(hashedPassword);
         return userMapper.insert(user);
