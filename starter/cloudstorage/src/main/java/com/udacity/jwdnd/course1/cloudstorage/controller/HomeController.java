@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import com.udacity.jwdnd.course1.cloudstorage.services.security.EncryptionService;
@@ -20,15 +21,19 @@ public class HomeController {
     private final UserService userService;
     private final CredentialService credentialService;
     private final EncryptionService encryptionService;
+    private final FileService fileService;
 
     public HomeController(NoteService noteService,
                           UserService userService,
                           CredentialService credentialService,
-                          EncryptionService encryptionService){
+                          EncryptionService encryptionService,
+                          FileService fileService){
+
         this.noteService = noteService;
         this.userService = userService;
         this.credentialService  =credentialService;
         this.encryptionService = encryptionService;
+        this.fileService = fileService;
     }
 
     @GetMapping
@@ -44,6 +49,7 @@ public class HomeController {
         model.addAttribute("credentialItem", credential);
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("noteItem", note);
+        model.addAttribute("filesList", fileService.listAll(user.getUserId()));
 
         return "home";
     }

@@ -1,38 +1,41 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/home/file")
+@RequestMapping("/files")
 public class FileController {
     private  final FileService fileService;
+    private final UserService userService;
 
-    public FileController(FileService fileService) {
+    public FileController(FileService fileService, UserService userService) {
         this.fileService = fileService;
+        this.userService = userService;
     }
 
-    @PostMapping
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, File file, Model model){
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, File file, Model model, Authentication authentication) throws Exception{
+        User user = userService.getUser(authentication.getName());
+        Integer userId = user.getUserId();
+        file.setUserId(userId);
 
         fileService.upload(file, multipartFile);
-        if (file.getFiledata()!= null){
-            model.addAttribute("successMessage", true);
-        }else
-            model.addAttribute("errorMessage");
-        return "result";
+
+        return "redirect:/home";
     }
 
-    @GetMapping
-    public String list(Model model){
-        model.addAttribute("fileList", fileService.listAll());
-        return "home";
+    @RequestMapping("/{fileId}/delete")
+    public String deleteCredential(@PathVariable Integer fileId){
+        fileService.delete(fileId);
+
+        return "redirect:/home";
     }
 }

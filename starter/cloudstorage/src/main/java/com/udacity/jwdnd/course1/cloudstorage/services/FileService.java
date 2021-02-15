@@ -5,11 +5,9 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -21,63 +19,29 @@ public class FileService {
         this.fileMapper = fileMapper;
     }
 
-    public List<File> listAll(){
-        List<File> fileList = new LinkedList<>();
+    public List<File> listAll(Integer userId){
 
-         fileMapper.list().iterator().forEachRemaining(fileList::add);
-         return fileList;
+         return fileMapper.list(userId);
     }
 
-    public File findById(Integer id){
-        return fileMapper.findById(id);
+    public File findById(Integer fileId){
+        return fileMapper.findById(fileId);
     }
 
-    @Transactional
-    public void upload(File file, MultipartFile multipartFile){
-        try {
-            Byte [] byteObjects = new Byte[multipartFile.getBytes().length];
-
-            int value = 0;
-            for (byte byt : multipartFile.getBytes()){
-                byteObjects[value++] = byt;
-            }
-
-            file.setFiledata(byteObjects);
-            fileMapper.upload(file);
-
-        }catch (IOException e){
-            logger.error(e.getMessage());
-        }
+    public File findOne(String fileName){
+        return fileMapper.findOne(fileName);
     }
 
-//
-//    public File update(File file, MultipartFile multipartFile) throws Exception{
-//        if (file.getFileId() == null){
-//            throw  new Exception("Id does not exist");
-//        }else {
-//            saveFileData(file, multipartFile);
-//        }
-//        file.setFileId(file.getFileId());
-//        file.setUserId(file.getUserId());
-//        return fileMapper.update(file);
-//    }
-//@Transactional
-//    public void saveFileData(File file, MultipartFile multipartFile) {
-//        try {
-//            Byte [] byteObjects = new Byte[multipartFile.getBytes().length];
-//
-//            int value = 0;
-//            for (byte byt : multipartFile.getBytes()){
-//                byteObjects[value++] = byt;
-//            }
-//            file.setFileData(byteObjects);
-//
-//        }catch (IOException e){
-//            logger.error(e.getMessage());
-//        }
-//    }
+    public int upload(File file, MultipartFile multipartFile) throws Exception{
+        file.setFileName(multipartFile.getOriginalFilename());
+        file.setContentType(multipartFile.getContentType());
+        file.setFileSize(String.valueOf(multipartFile.getSize()));
+        file.setFileData(multipartFile.getBytes());
 
-    public void delete(Integer id){
-        fileMapper.delete(id);
+       return fileMapper.upload(file);
+    }
+
+    public void delete(Integer fileId){
+        fileMapper.delete(fileId);
     }
 }
