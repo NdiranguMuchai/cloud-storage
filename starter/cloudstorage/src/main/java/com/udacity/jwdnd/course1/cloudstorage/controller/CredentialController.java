@@ -23,21 +23,18 @@ public class CredentialController {
         this.userService = userService;
     }
     @PostMapping
-    public String createCredential(@ModelAttribute Credentials credential, Authentication authentication, Model model){
-        String credentialAddedError = null;
+    public String createOrUpdateCredential(@ModelAttribute Credentials credential, Authentication authentication, Model model){
+
 
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
 
-        int rowsAdded = credentialService.create(credential);
-        if (rowsAdded < 0){
-            credentialAddedError = "Error while creating credential. Please try again";
-        }
-        if (credentialAddedError == null) {
-            model.addAttribute("credentialAddedSuccess", true);
-        } else {
-            model.addAttribute("credentialAddedError", credentialAddedError);
+
+        if (credential.getCredentialId() >0){
+            credentialService.update(credential);
+        }else {
+            credentialService.create(credential);
         }
 
 
@@ -50,5 +47,7 @@ public class CredentialController {
 
         return "redirect:/home";
     }
+
+
 
 }
