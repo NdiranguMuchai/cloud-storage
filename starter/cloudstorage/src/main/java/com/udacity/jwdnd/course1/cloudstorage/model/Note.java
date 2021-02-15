@@ -12,6 +12,15 @@ public class Note {
         this.noteDescription = description;
         this.userId = userId;
     }
+//    public Note (){}
+
+    public Integer getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(Integer noteId) {
+        this.noteId = noteId;
+    }
 
     public String getTitle() {
         return noteTitle;

@@ -19,4 +19,7 @@ public interface NoteMapper {
 
     @Delete("DELETE FROM NOTES WHERE noteId =#{noteId}")
     void deleteNote(int noteId);
+
+    @Select("SELECT * FROM NOTES WHERE noteId = #{noteId}")
+    Note findOne(Integer noteId);
 }
