@@ -23,8 +23,6 @@ public class NoteController {
 
     @PostMapping
     public String createOrUpdateNote(@ModelAttribute Note note, Authentication authentication, Model model){
-
-
         User user = userService.getUser(authentication.getName());
 
         Integer userId = user.getUserId();
@@ -35,7 +33,6 @@ public class NoteController {
        }else {
            noteService.createNote(note);
        }
-
 
         return "redirect:/home";
     }

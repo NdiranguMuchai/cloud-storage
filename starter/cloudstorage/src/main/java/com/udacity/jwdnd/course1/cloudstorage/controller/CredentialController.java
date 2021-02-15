@@ -23,20 +23,19 @@ public class CredentialController {
         this.userService = userService;
     }
     @PostMapping
-    public String createOrUpdateCredential(@ModelAttribute Credentials credential, Authentication authentication, Model model){
-
+    public String createOrUpdateCredential(@ModelAttribute Credentials credential,
+                                           Authentication authentication,
+                                           Model model){
 
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         credential.setUserId(userId);
-
 
         if (credential.getCredentialId() >0){
             credentialService.update(credential);
         }else {
             credentialService.create(credential);
         }
-
 
         return "redirect:/home";
     }
