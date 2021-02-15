@@ -43,4 +43,10 @@ public class NoteController {
 
         return "redirect:/home";
     }
+
+    @RequestMapping("/{noteId}/delete")
+    public String deleteNote(@PathVariable Integer noteId){
+         noteService.deleteNote(noteId);
+        return "redirect:/home";
+    }
 }

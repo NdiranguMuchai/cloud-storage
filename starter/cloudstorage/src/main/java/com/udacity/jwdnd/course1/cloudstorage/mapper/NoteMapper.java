@@ -18,8 +18,10 @@ public interface NoteMapper {
     void updateNote(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteId =#{noteId}")
-    void deleteNote(int noteId);
+    void deleteNote(Integer noteId);
 
     @Select("SELECT * FROM NOTES WHERE noteId = #{noteId}")
     Note findOne(Integer noteId);
+
+
 }
