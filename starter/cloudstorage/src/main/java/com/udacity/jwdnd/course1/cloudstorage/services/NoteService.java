@@ -24,8 +24,6 @@ public class NoteService {
     }
 
     public void update(Note note){
-        note.setNoteId(note.getNoteId());
-        note.setUserId(note.getUserId());
         noteMapper.updateNote(note);
     }
 

@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
@@ -20,7 +21,10 @@ public class HomeController {
     private final CredentialService credentialService;
     private final EncryptionService encryptionService;
 
-    public HomeController(NoteService noteService, UserService userService, CredentialService credentialService, EncryptionService encryptionService){
+    public HomeController(NoteService noteService,
+                          UserService userService,
+                          CredentialService credentialService,
+                          EncryptionService encryptionService){
         this.noteService = noteService;
         this.userService = userService;
         this.credentialService  =credentialService;
@@ -30,13 +34,16 @@ public class HomeController {
     @GetMapping
     public String getHomePage(Model model, Authentication authentication){
         User user = userService.getUser(authentication.getName());
+
         String emptyString = "";
         Credentials credential = new Credentials(0, emptyString, emptyString, emptyString, emptyString, user.getUserId());
+        Note note = new Note(0, emptyString, emptyString, user.getUserId());
 
         model.addAttribute("notes",noteService.getNotes(user.getUserId()));
         model.addAttribute("credentialsList", credentialService.listAllCredentials(user.getUserId()));
         model.addAttribute("credentialItem", credential);
         model.addAttribute("encryptionService", encryptionService);
+        model.addAttribute("noteItem", note);
 
         return "home";
     }

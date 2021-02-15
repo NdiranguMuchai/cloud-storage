@@ -22,23 +22,19 @@ public class NoteController {
     }
 
     @PostMapping
-    public String createNote(@ModelAttribute Note note, Authentication authentication, Model model){
-        String noteAddError = null;
+    public String createOrUpdateNote(@ModelAttribute Note note, Authentication authentication, Model model){
+
 
         User user = userService.getUser(authentication.getName());
 
         Integer userId = user.getUserId();
         note.setUserId(userId);
 
-        int rowsAdded = noteService.createNote(note);
-        if (rowsAdded < 0){
-            noteAddError = "Error while creating note. Please try again";
-        }
-        if (noteAddError == null) {
-            model.addAttribute("noteAddSuccess", true);
-        } else {
-            model.addAttribute("noteAddError", noteAddError);
-        }
+       if (note.getNoteId() > 0){
+           noteService.update(note);
+       }else {
+           noteService.createNote(note);
+       }
 
 
         return "redirect:/home";
