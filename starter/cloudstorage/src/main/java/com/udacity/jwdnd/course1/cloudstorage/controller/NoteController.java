@@ -35,35 +35,35 @@ public class NoteController {
         Integer userId = user.getUserId();
         note.setUserId(userId);
 
-       if (note.getNoteId() > 0){
+        if (note.getNoteId() > 0){
 
-           try {
-               noteService.update(note);
+            try {
+                noteService.update(note);
 
-               redirectAttributes.addFlashAttribute("successMessage", "Note was successfully updated");
-               return "redirect:/result";
+                redirectAttributes.addFlashAttribute("successMessage", "Note was successfully updated");
+                return "redirect:/result";
 
-           }catch (Exception e){
-               logger.error(e.getMessage());
-               redirectAttributes.addFlashAttribute("errorMessage", "Note update failed. Please try again");
-               return "redirect:/result";
-           }
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                redirectAttributes.addFlashAttribute("errorMessage", "Note update failed. Please try again");
+                return "redirect:/result";
+            }
 
-       }else {
+        }else {
 
-           try {
-               noteService.createNote(note);
+            try {
+                noteService.createNote(note);
 
-               redirectAttributes.addFlashAttribute("successMessage", "Note was successfully created");
-               return "redirect:/result";
+                redirectAttributes.addFlashAttribute("successMessage", "Note was successfully created");
+                return "redirect:/result";
 
-           }catch (Exception e){
-               logger.error(e.getMessage());
-               redirectAttributes.addFlashAttribute("errorMessage", "Note creation failed. Please try again");
-               return "redirect:/result";
-           }
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                redirectAttributes.addFlashAttribute("errorMessage", "Note creation failed. Please try again");
+                return "redirect:/result";
+            }
 
-       }
+        }
 
 
     }

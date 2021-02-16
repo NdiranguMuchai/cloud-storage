@@ -21,7 +21,7 @@ public class FileService {
 
     public List<File> listAll(Integer userId){
 
-         return fileMapper.list(userId);
+        return fileMapper.list(userId);
     }
 
     public File findById(Integer fileId){
@@ -38,7 +38,7 @@ public class FileService {
         file.setFileSize(String.valueOf(multipartFile.getSize()));
         file.setFileData(multipartFile.getBytes());
 
-       return fileMapper.upload(file);
+        return fileMapper.upload(file);
     }
 
     public void delete(Integer fileId){
