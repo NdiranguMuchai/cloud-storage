@@ -40,19 +40,25 @@ public class FileController {
         Integer userId = user.getUserId();
         file.setUserId(userId);
 
-        try {
-            fileService.upload(file, multipartFile);
+        if (fileService.findOne(multipartFile.getOriginalFilename()) !=null ){
+            redirectAttributes.addFlashAttribute("errorMessage", "Sorry, you cannot upload two files with the same name");
+        }else {
 
-            redirectAttributes.addFlashAttribute("successMessage", "File was successfully uploaded");
-            return "redirect:/result";
+            try {
+                fileService.upload(file, multipartFile);
 
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "File upload failed. Please try again");
-            return "redirect:/result";
+                redirectAttributes.addFlashAttribute("successMessage", "File was successfully uploaded");
+                return "redirect:/result";
+
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                redirectAttributes.addFlashAttribute("errorMessage", "File upload failed. Please try again");
+                return "redirect:/result";
+            }
+
         }
 
-
+        return "redirect:/result";
     }
 
     @RequestMapping("/{fileId}/delete")
