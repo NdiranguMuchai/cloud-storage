@@ -6,12 +6,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NoteActions {
@@ -97,6 +99,32 @@ public class NoteActions {
         resultPage.clickLink();
         notesSection.clickNoteBar();
         assertEquals(NOTE_INFO_EDIT, notesSection.getNoteTitleText());
+    }
+
+    @Test
+    void  deleteNote(){
+        //create note
+        NotesSection notesSection = new NotesSection(driver);
+        notesSection.createNote(NOTE_INFO, NOTE_INFO);
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.clickLink();
+
+        //logout
+        HomePage homePage = new HomePage(driver);
+        homePage.logout();
+        driver.get(BASE_URL +"/login");
+        assertEquals("Login", driver.getTitle());
+
+        //login
+        loginPage.login(username, password);
+        driver.get(BASE_URL +"/home");
+        assertEquals("Home", driver.getTitle());
+
+        //delete
+        notesSection.deleteNote();
+        resultPage.clickLink();
+        notesSection.clickNoteBar();
+        assertThrows(NoSuchElementException.class, notesSection::getNoteTitleText);
     }
 
 }
