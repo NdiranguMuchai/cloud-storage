@@ -21,8 +21,7 @@ public class SignUpPage {
     @FindBy(id = "submit-button")
     private WebElement submitButton;
 
-    @FindBy(id = "login-link")
-    private WebElement loginLink;
+
 
     public SignUpPage(WebDriver webDriver){
         PageFactory.initElements(webDriver, this);
@@ -34,7 +33,7 @@ public class SignUpPage {
         this.usernameField.sendKeys(username);
         this.passwordField.sendKeys(password);
         this.submitButton.click();
-        this.loginLink.click();
+
     }
 
 }

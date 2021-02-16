@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
+import com.udacity.jwdnd.course1.cloudstorage.templatePages.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.SignUpPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -58,6 +59,18 @@ public class SignUpAndLogin {
         signUpPage.signup("Robert", "Lewandowski", username, password);
 
 
-//        assertEquals("success-msg", driver.findElement(By.id("success-msg")).getTagName());
+        driver.get(BASE_URL +"/login");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username, password);
+
+        driver.get(BASE_URL +"/home");
+
+        //only users who have successfully logged in can access home page
+        assertEquals("Home", driver.getTitle());
+    }
+
+    @Test
+    public void testUserLogout(){
+
     }
 }
