@@ -27,6 +27,9 @@ public class NotesSection {
     @FindBy(id="noteTitleDisplay")
     private WebElement noteTitleText;
 
+    @FindBy(id="editNoteButton")
+    private WebElement editNoteButton;
+
     private final  WebDriver webDriver;
 
     public  NotesSection(WebDriver webDriver){
@@ -50,4 +53,11 @@ public class NotesSection {
         return noteTitleText.getAttribute("innerHTML");
     }
 
+    public void editNote(String noteTitle, String noteDescription){
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.noteBar);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.editNoteButton);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + noteTitle + "';", this.noteTitleField);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + noteDescription + "';", this.noteDescriptionField);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.submitNoteButton);
+    }
 }
