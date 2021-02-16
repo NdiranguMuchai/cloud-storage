@@ -140,7 +140,7 @@
                         <tbody th:each="credential:${credentialsList}">
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-success"
+                                <button type="button" class="btn btn-success" id="editCredentialButton"
                                         th:onclick="javascript:showCredentialModal([[${credential}]],[[${encryptionService.decryptValue(credential.password,credential.key)}]])">
                                     Edit
                                 </button>

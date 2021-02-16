@@ -1,9 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
-import com.udacity.jwdnd.course1.cloudstorage.templatePages.CredentialSection;
-import com.udacity.jwdnd.course1.cloudstorage.templatePages.LoginPage;
-import com.udacity.jwdnd.course1.cloudstorage.templatePages.ResultPage;
-import com.udacity.jwdnd.course1.cloudstorage.templatePages.SignUpPage;
+import com.udacity.jwdnd.course1.cloudstorage.templatePages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -51,7 +48,6 @@ public class CredentialActions {
         driver.get(BASE_URL +"/login");
         loginPage = new LoginPage(driver);
         loginPage.login(username, password);
-
         driver.get(BASE_URL +"/home");
     }
 
@@ -75,5 +71,29 @@ public class CredentialActions {
         assertEquals(CREDENTIAL_INFO, credentialSection.getUrlText());
     }
 
-    
+    @Test
+    void updateCredential(){
+        //create credential
+       CredentialSection credentialSection = new CredentialSection(driver);
+        credentialSection.createCredential(CREDENTIAL_INFO,CREDENTIAL_INFO, CREDENTIAL_INFO);
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.clickLink();
+
+        //logout
+        HomePage homePage = new HomePage(driver);
+        homePage.logout();
+        driver.get(BASE_URL +"/login");
+        assertEquals("Login", driver.getTitle());
+
+        //login
+        loginPage.login(username, password);
+        driver.get(BASE_URL +"/home");
+        assertEquals("Home", driver.getTitle());
+
+        //edit credential
+        credentialSection.updateCredential(CREDENTIAL_INFO_EDIT, CREDENTIAL_INFO_EDIT, CREDENTIAL_INFO_EDIT);
+        resultPage.clickLink();
+        credentialSection.clickCredentialBar();
+        assertEquals(CREDENTIAL_INFO_EDIT, credentialSection.getUrlText());
+    }
 }

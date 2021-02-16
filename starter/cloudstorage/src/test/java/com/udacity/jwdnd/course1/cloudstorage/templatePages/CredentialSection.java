@@ -28,6 +28,9 @@ public class CredentialSection {
     @FindBy(id ="credentialUrlText" )
     private WebElement credentialUrlText;
 
+    @FindBy(id = "editCredentialButton")
+    private WebElement editCredentialButton;
+
     private final WebDriver webDriver;
 
     public CredentialSection(WebDriver webDriver){
@@ -50,5 +53,14 @@ public class CredentialSection {
 
     public String getUrlText(){
         return credentialUrlText.getAttribute("innerHTML");
+    }
+
+    public void updateCredential(String url, String username, String password){
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.credentialBar);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.editCredentialButton);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + url + "';", this.urlField);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + username + "';", this.usernameField);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + password + "';", this.passwordField);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.submitCredentialsButton);
     }
 }
