@@ -13,9 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/files")
@@ -33,23 +33,43 @@ public class FileController {
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile,
                              File file,
-                             Model model,
+                             RedirectAttributes redirectAttributes,
                              Authentication authentication) throws Exception{
 
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
         file.setUserId(userId);
 
-        fileService.upload(file, multipartFile);
+        try {
+            fileService.upload(file, multipartFile);
 
-        return "redirect:/home";
+            redirectAttributes.addFlashAttribute("successMessage", "File was successfully uploaded");
+            return "redirect:/result";
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "File upload failed. Please try again");
+            return "redirect:/result";
+        }
+
+
     }
 
     @RequestMapping("/{fileId}/delete")
-    public String deleteCredential(@PathVariable Integer fileId){
-        fileService.delete(fileId);
+    public String deleteCredential(@PathVariable Integer fileId, RedirectAttributes redirectAttributes){
 
-        return "redirect:/home";
+        try{
+            fileService.delete(fileId);
+
+            redirectAttributes.addFlashAttribute("successMessage", "File was successfully deleted");
+            return "redirect:/result";
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "File item delete failed. Please try again");
+            return "redirect:/result";
+        }
+
     }
 
     @RequestMapping("/{fileId}/view")
