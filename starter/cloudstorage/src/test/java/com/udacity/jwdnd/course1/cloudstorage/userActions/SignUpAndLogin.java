@@ -18,7 +18,7 @@ public class SignUpAndLogin {
     private int port;
 
     private WebDriver driver;
-     public String BASE_URL;
+    public String BASE_URL;
 
 
     @BeforeAll

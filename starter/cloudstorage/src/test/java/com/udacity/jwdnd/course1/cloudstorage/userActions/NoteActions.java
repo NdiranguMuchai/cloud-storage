@@ -25,7 +25,7 @@ public class NoteActions {
     public static final String NOTE_INFO= "Maneno";
     public static final String NOTE_INFO_EDIT= "x";
 
-   private final String username = "uleMsee";
+    private final String username = "uleMsee";
     private final String password = "kipassword";
     private LoginPage loginPage;
 

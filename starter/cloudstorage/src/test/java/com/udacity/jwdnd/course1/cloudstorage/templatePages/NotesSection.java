@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.templatePages;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
