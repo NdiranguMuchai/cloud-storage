@@ -1,10 +1,15 @@
 package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
-import com.udacity.jwdnd.course1.cloudstorage.templatePages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.templatePages.NotesSection;
+import com.udacity.jwdnd.course1.cloudstorage.templatePages.ResultPage;
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.SignUpPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,12 +18,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SignUpAndLogin {
+public class NoteActions {
     @LocalServerPort
     private int port;
 
     private WebDriver driver;
-     public String BASE_URL;
+    public String BASE_URL;
+    public static final String NOTE_INFO= "Maneno";
 
 
     @BeforeAll
@@ -31,8 +37,20 @@ public class SignUpAndLogin {
         this.driver = new ChromeDriver();
         BASE_URL = "http://localhost:" + port;
 
+        //login
+        String username = "uleMsee";
+        String password = "kipassword";
+
+        driver.get(BASE_URL + "/signup");
+        SignUpPage signUpPage = new SignUpPage(driver);
+        signUpPage.signup("Robert", "Lewandowski", username, password);
 
 
+        driver.get(BASE_URL +"/login");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username, password);
+
+        driver.get(BASE_URL +"/home");
     }
 
     @AfterEach
@@ -41,54 +59,18 @@ public class SignUpAndLogin {
             driver.quit();
         }
     }
-    @Test
-    public void getLoginPage() {
-        driver.get(BASE_URL + "/login");
-
-        //can be accessed by anyone
-        assertEquals("Login", driver.getTitle());
-    }
 
     @Test
-    public void userSignup(){
-        String username = "uleMsee";
-        String password = "kipassword";
+    void addNote(){
+        NotesSection notesSection = new NotesSection(driver);
+        notesSection.createNote(NOTE_INFO, NOTE_INFO);
 
-        driver.get(BASE_URL + "/signup");
-        SignUpPage signUpPage = new SignUpPage(driver);
-        signUpPage.signup("Robert", "Lewandowski", username, password);
-
-
-        driver.get(BASE_URL +"/login");
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, password);
-
-        driver.get(BASE_URL +"/home");
-
-        //only users who have successfully logged in can access home page
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.clickLink();
         assertEquals("Home", driver.getTitle());
+
+        notesSection.clickNoteBar();
+        assertEquals(NOTE_INFO, notesSection.getNoteTitleText());
     }
 
-    @Test
-    public void userLogout(){
-        String username = "uleMsee";
-        String password = "kipassword";
-
-        driver.get(BASE_URL + "/signup");
-        SignUpPage signUpPage = new SignUpPage(driver);
-        signUpPage.signup("Robert", "Lewandowski", username, password);
-
-
-        driver.get(BASE_URL +"/login");
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, password);
-
-        driver.get(BASE_URL +"/home");
-        HomePage homePage = new HomePage(driver);
-        homePage.logout();
-
-        //once logged out user can no longer access the home page
-        assertEquals("Login", driver.getTitle());
-
-    }
 }
