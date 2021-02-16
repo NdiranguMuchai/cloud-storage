@@ -1,14 +1,12 @@
 package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
+import com.udacity.jwdnd.course1.cloudstorage.templatePages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.SignUpPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -71,6 +69,23 @@ public class SignUpAndLogin {
 
     @Test
     public void testUserLogout(){
+        String username = "uleMsee";
+        String password = "kipassword";
+
+        driver.get(BASE_URL + "/signup");
+        SignUpPage signUpPage = new SignUpPage(driver);
+        signUpPage.signup("Robert", "Lewandowski", username, password);
+
+
+        driver.get(BASE_URL +"/login");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username, password);
+
+        driver.get(BASE_URL +"/home");
+        HomePage homePage = new HomePage(driver);
+        homePage.logout();
+
+        assertEquals("Login", driver.getTitle());
 
     }
 }
