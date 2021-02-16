@@ -31,6 +31,9 @@ public class CredentialSection {
     @FindBy(id = "editCredentialButton")
     private WebElement editCredentialButton;
 
+    @FindBy(id = "deleteCredentialButton")
+    private WebElement deleteCredentialButton;
+
     private final WebDriver webDriver;
 
     public CredentialSection(WebDriver webDriver){
@@ -62,5 +65,10 @@ public class CredentialSection {
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + username + "';", this.usernameField);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + password + "';", this.passwordField);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.submitCredentialsButton);
+    }
+
+    public void deleteCredential(){
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.credentialBar);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", this.deleteCredentialButton);
     }
 }

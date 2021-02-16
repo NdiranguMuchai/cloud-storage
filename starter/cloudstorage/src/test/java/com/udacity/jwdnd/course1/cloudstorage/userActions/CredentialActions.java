@@ -6,12 +6,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CredentialActions {
@@ -95,5 +97,32 @@ public class CredentialActions {
         resultPage.clickLink();
         credentialSection.clickCredentialBar();
         assertEquals(CREDENTIAL_INFO_EDIT, credentialSection.getUrlText());
+    }
+
+    @Test
+    void  deleteCredential(){
+        //create credential
+        CredentialSection credentialSection = new CredentialSection(driver);
+        credentialSection.createCredential(CREDENTIAL_INFO,CREDENTIAL_INFO, CREDENTIAL_INFO);
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.clickLink();
+
+        //logout
+        HomePage homePage = new HomePage(driver);
+        homePage.logout();
+        driver.get(BASE_URL +"/login");
+        assertEquals("Login", driver.getTitle());
+
+
+        //login
+        loginPage.login(username, password);
+        driver.get(BASE_URL +"/home");
+        assertEquals("Home", driver.getTitle());
+
+        //delete credential
+        credentialSection.deleteCredential();
+        resultPage.clickLink();
+        credentialSection.clickCredentialBar();
+        assertThrows(NoSuchElementException.class, credentialSection::getUrlText);
     }
 }
