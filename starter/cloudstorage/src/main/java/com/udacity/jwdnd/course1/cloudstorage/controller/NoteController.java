@@ -35,6 +35,10 @@ public class NoteController {
         Integer userId = user.getUserId();
         note.setUserId(userId);
 
+        if (noteService.findByTitleAndDesc(note.getNoteTitle(), note.getNoteDescription()) != null){
+            redirectAttributes.addFlashAttribute("errorMessage", "Note already exists");
+        }else
+
         if (note.getNoteId() > 0){
 
             try {
@@ -65,7 +69,7 @@ public class NoteController {
 
         }
 
-
+        return "redirect:/result";
     }
 
     @RequestMapping("/{noteId}/delete")

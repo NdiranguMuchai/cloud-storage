@@ -23,5 +23,8 @@ public interface NoteMapper {
     @Select("SELECT * FROM NOTES WHERE noteid = #{noteId}")
     Note findOne(Integer noteId);
 
+    @Select("SELECT * FROM NOTES WHERE notetitle = #{noteTitle} AND notedescription =#{noteDescription} " )
+    Note findByTitleAndDesc(String noteTitle, String noteDescription);
+
 
 }

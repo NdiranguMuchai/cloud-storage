@@ -35,4 +35,8 @@ public class NoteService {
         noteMapper.deleteNote(noteId);
     }
 
+    public Note findByTitleAndDesc(String noteTitle, String noteDescription){
+        return noteMapper.findByTitleAndDesc(noteTitle, noteDescription);
+    }
+
 }
