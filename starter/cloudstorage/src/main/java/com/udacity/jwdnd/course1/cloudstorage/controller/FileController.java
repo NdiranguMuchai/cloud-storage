@@ -42,7 +42,12 @@ public class FileController {
 
         if (fileService.findOne(multipartFile.getOriginalFilename()) !=null ){
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry, you cannot upload two files with the same name");
-        }else {
+
+        }else if (multipartFile.getOriginalFilename().isEmpty()){
+            redirectAttributes.addFlashAttribute("errorMessage", "Please select a file to upload");
+//            return "redirect:result";
+        }
+        else {
 
             try {
                 fileService.upload(file, multipartFile);
