@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserActionMessages;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,15 @@ public class NoteController {
 
     private final NoteService noteService;
     private final UserService userService;
+    private final UserActionMessages userActionMessages;
 
-    public NoteController(NoteService noteService, UserService userService) {
+    public NoteController(NoteService noteService,
+                          UserService userService,
+                          UserActionMessages userActionMessages) {
+
         this.noteService = noteService;
         this.userService = userService;
+        this.userActionMessages = userActionMessages;
     }
 
     @PostMapping
@@ -36,7 +42,7 @@ public class NoteController {
         note.setUserId(userId);
 
         if (noteService.findByTitleAndDesc(note.getNoteTitle(), note.getNoteDescription()) != null){
-            redirectAttributes.addFlashAttribute("errorMessage", "Note already exists");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.NOTE_ALREADY_EXISTS);
         }else
 
         if (note.getNoteId() > 0){
@@ -44,12 +50,12 @@ public class NoteController {
             try {
                 noteService.update(note);
 
-                redirectAttributes.addFlashAttribute("successMessage", "Note was successfully updated");
+                redirectAttributes.addFlashAttribute("successMessage", userActionMessages.NOTE_UPDATE_SUCCESS);
                 return "redirect:/result";
 
             }catch (Exception e){
                 logger.error(e.getMessage());
-                redirectAttributes.addFlashAttribute("errorMessage", "Note update failed. Please try again");
+                redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.NOTE_UPDATE_ERROR);
                 return "redirect:/result";
             }
 
@@ -58,12 +64,12 @@ public class NoteController {
             try {
                 noteService.createNote(note);
 
-                redirectAttributes.addFlashAttribute("successMessage", "Note was successfully created");
+                redirectAttributes.addFlashAttribute("successMessage", userActionMessages.NOTE_CREATE_SUCCESS);
                 return "redirect:/result";
 
             }catch (Exception e){
                 logger.error(e.getMessage());
-                redirectAttributes.addFlashAttribute("errorMessage", "Note creation failed. Please try again");
+                redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.NOTE_CREATE_ERROR);
                 return "redirect:/result";
             }
 
@@ -78,12 +84,12 @@ public class NoteController {
 
             noteService.deleteNote(noteId);
 
-            redirectAttributes.addFlashAttribute("successMessage", "Note was successfully deleted");
+            redirectAttributes.addFlashAttribute("successMessage", userActionMessages.NOTE_DELETE_SUCCESS);
             return "redirect:/result";
 
         }catch (Exception e){
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "Note item delete failed. Please try again");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.NOTE_DELETE_ERROR);
             return "redirect:/result";
         }
 

@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserActionMessages;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,15 @@ public class CredentialController {
 
     private final CredentialService credentialService;
     private final UserService userService;
+    private final UserActionMessages userActionMessages;
 
-    public CredentialController(CredentialService credentialService, UserService userService) {
+    public CredentialController(CredentialService credentialService,
+                                UserService userService,
+                                UserActionMessages userActionMessages) {
+
         this.credentialService = credentialService;
         this.userService = userService;
+        this.userActionMessages = userActionMessages;
     }
     @PostMapping
     public String createOrUpdateCredential(@ModelAttribute Credentials credential,
@@ -38,24 +44,24 @@ public class CredentialController {
         if (credential.getCredentialId() >0){
             try {
                 credentialService.update(credential);
-                redirectAttributes.addFlashAttribute("successMessage", "Credentials were successfully updated");
+                redirectAttributes.addFlashAttribute("successMessage", userActionMessages.CREDENTIALS_UPDATE_SUCCESS);
                 return "redirect:/result";
 
             }catch (Exception e){
                 logger.error(e.getMessage());
-                redirectAttributes.addFlashAttribute("errorMessage", "Credentials update failed. Please try again");
+                redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.CREDENTIALS_UPDATE_ERROR);
                 return "redirect:/result";
             }
 
         }else {
             try {
                 credentialService.create(credential);
-                redirectAttributes.addFlashAttribute("successMessage", "Credentials were successfully created");
+                redirectAttributes.addFlashAttribute("successMessage", userActionMessages.CREDENTIALS_CREATE_SUCCESS);
                 return "redirect:/result";
 
             }catch (Exception e){
                 logger.error(e.getMessage());
-                redirectAttributes.addFlashAttribute("errorMessage", "Credentials creation failed. Please try again");
+                redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.CREDENTIALS_CREATE_ERROR);
                 return "redirect:/result";
             }
         }
@@ -67,12 +73,12 @@ public class CredentialController {
 
         try {
             credentialService.deleteCredential(credentialId);
-            redirectAttributes.addFlashAttribute("successMessage", "Credentials were successfully deleted");
+            redirectAttributes.addFlashAttribute("successMessage", userActionMessages.CREDENTIALS_DELETE_SUCCESS);
             return "redirect:/result";
 
         }catch (Exception e){
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "Credentials delete failed. Please try again");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.CREDENTIALS_DELETE_ERROR);
             return "redirect:/result";
         }
 

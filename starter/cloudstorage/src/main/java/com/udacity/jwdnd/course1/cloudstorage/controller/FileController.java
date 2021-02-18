@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserActionMessages;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +25,12 @@ public class FileController {
 
     private  final FileService fileService;
     private final UserService userService;
+    private final UserActionMessages userActionMessages;
 
-    public FileController(FileService fileService, UserService userService) {
+    public FileController(FileService fileService, UserService userService, UserActionMessages userActionMessages) {
         this.fileService = fileService;
         this.userService = userService;
+        this.userActionMessages = userActionMessages;
     }
 
     @PostMapping("/upload")
@@ -41,10 +44,10 @@ public class FileController {
         file.setUserId(userId);
 
         if (fileService.findOne(multipartFile.getOriginalFilename()) !=null ){
-            redirectAttributes.addFlashAttribute("errorMessage", "Sorry, you cannot upload two files with the same name");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.FILE_NAME_EXISTS);
 
         }else if (multipartFile.getOriginalFilename().isEmpty()){
-            redirectAttributes.addFlashAttribute("errorMessage", "Please select a file to upload");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.NO_FILE_SELECTED);
 //            return "redirect:result";
         }
         else {
@@ -52,12 +55,12 @@ public class FileController {
             try {
                 fileService.upload(file, multipartFile);
 
-                redirectAttributes.addFlashAttribute("successMessage", "File was successfully uploaded");
+                redirectAttributes.addFlashAttribute("successMessage", userActionMessages.FILE_UPLOAD_SUCCESS);
                 return "redirect:/result";
 
             }catch (Exception e){
                 logger.error(e.getMessage());
-                redirectAttributes.addFlashAttribute("errorMessage", "File upload failed. Please try again");
+                redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.FILE_UPLOAD_ERROR);
                 return "redirect:/result";
             }
 
@@ -72,12 +75,12 @@ public class FileController {
         try{
             fileService.delete(fileId);
 
-            redirectAttributes.addFlashAttribute("successMessage", "File was successfully deleted");
+            redirectAttributes.addFlashAttribute("successMessage", userActionMessages.FILE_DELETE_SUCCESS);
             return "redirect:/result";
 
         }catch (Exception e){
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "File item delete failed. Please try again");
+            redirectAttributes.addFlashAttribute("errorMessage", userActionMessages.FILE_DELETE_ERROR);
             return "redirect:/result";
         }
 
