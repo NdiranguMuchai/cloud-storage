@@ -2,10 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CredentialActions {
     @LocalServerPort
     private int port;
@@ -27,7 +25,11 @@ public class CredentialActions {
 
     private final String username = "uleMsee";
     private final String password = "kipassword";
+
     private LoginPage loginPage;
+    private HomePage homePage;
+    private CredentialSection credentialSection;
+    private ResultPage resultPage;
 
 
     @BeforeAll
@@ -51,6 +53,10 @@ public class CredentialActions {
         loginPage = new LoginPage(driver);
         loginPage.login(username, password);
         driver.get(BASE_URL +"/home");
+
+        credentialSection = new CredentialSection(driver);
+        resultPage = new ResultPage(driver);
+        homePage = new HomePage(driver);
     }
 
     @AfterEach
@@ -61,11 +67,10 @@ public class CredentialActions {
     }
 
     @Test
+    @Order(2)
     void addCredential(){
-        CredentialSection credentialSection = new CredentialSection(driver);
         credentialSection.createCredential(CREDENTIAL_INFO, CREDENTIAL_INFO, CREDENTIAL_INFO);
 
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
         assertEquals("Home", driver.getTitle());
 
@@ -74,11 +79,10 @@ public class CredentialActions {
     }
 
     @Test
+    @Order(3)
     void updateCredential(){
         //create credential
-       CredentialSection credentialSection = new CredentialSection(driver);
         credentialSection.createCredential(CREDENTIAL_INFO,CREDENTIAL_INFO, CREDENTIAL_INFO);
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
 
         //logout
@@ -87,7 +91,7 @@ public class CredentialActions {
         driver.get(BASE_URL +"/login");
         assertEquals("Login", driver.getTitle());
 
-        //login
+        //login for existing user
         loginPage.login(username, password);
         driver.get(BASE_URL +"/home");
         assertEquals("Home", driver.getTitle());
@@ -100,21 +104,19 @@ public class CredentialActions {
     }
 
     @Test
+    @Order(1)
     void  deleteCredential(){
         //create credential
-        CredentialSection credentialSection = new CredentialSection(driver);
         credentialSection.createCredential(CREDENTIAL_INFO,CREDENTIAL_INFO, CREDENTIAL_INFO);
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
 
         //logout
-        HomePage homePage = new HomePage(driver);
         homePage.logout();
         driver.get(BASE_URL +"/login");
         assertEquals("Login", driver.getTitle());
 
 
-        //login
+        //login for existing user
         loginPage.login(username, password);
         driver.get(BASE_URL +"/home");
         assertEquals("Home", driver.getTitle());

@@ -2,10 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.userActions;
 
 import com.udacity.jwdnd.course1.cloudstorage.templatePages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NoteActions {
     @LocalServerPort
     private int port;
@@ -27,7 +25,11 @@ public class NoteActions {
 
     private final String username = "uleMsee";
     private final String password = "kipassword";
+
     private LoginPage loginPage;
+    private HomePage homePage;
+    private NotesSection notesSection;
+    private ResultPage resultPage;
 
 
     @BeforeAll
@@ -52,6 +54,10 @@ public class NoteActions {
         loginPage.login(username, password);
 
         driver.get(BASE_URL +"/home");
+
+        homePage = new HomePage(driver);
+        notesSection = new NotesSection(driver);
+        resultPage = new ResultPage(driver);
     }
 
     @AfterEach
@@ -62,11 +68,10 @@ public class NoteActions {
     }
 
     @Test
+    @Order(2)
     void addNote(){
-        NotesSection notesSection = new NotesSection(driver);
         notesSection.createNote(NOTE_INFO, NOTE_INFO);
 
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
         assertEquals("Home", driver.getTitle());
 
@@ -76,15 +81,13 @@ public class NoteActions {
 
 
     @Test
+    @Order(3)
     void editNote(){
         //create note
-        NotesSection notesSection = new NotesSection(driver);
         notesSection.createNote(NOTE_INFO, NOTE_INFO);
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
 
         //logout
-        HomePage homePage = new HomePage(driver);
         homePage.logout();
         driver.get(BASE_URL +"/login");
         assertEquals("Login", driver.getTitle());
@@ -102,15 +105,13 @@ public class NoteActions {
     }
 
     @Test
+    @Order(1)
     void  deleteNote(){
         //create note
-        NotesSection notesSection = new NotesSection(driver);
         notesSection.createNote(NOTE_INFO, NOTE_INFO);
-        ResultPage resultPage = new ResultPage(driver);
         resultPage.clickLink();
 
         //logout
-        HomePage homePage = new HomePage(driver);
         homePage.logout();
         driver.get(BASE_URL +"/login");
         assertEquals("Login", driver.getTitle());
